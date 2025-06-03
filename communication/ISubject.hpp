@@ -2,6 +2,8 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <unordered_map>
+
 
 #pragma once
 
@@ -15,7 +17,7 @@ class ISubject{
         virtual void AddObserver(int bucket, IObserver* observer);
         virtual void RemoveObserver(int bucket, IObserver* observer);
 
-        virtual void Notify(int bucket, const std::vector<std::string>& message);
+        virtual void Notify(int bucket, const std::unordered_map<std::string, int>& message);
 
     private:
         typedef std::forward_list<IObserver*> ObserversList;

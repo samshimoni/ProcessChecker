@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <iostream>
-
+#include <unordered_map>
 ProcessExecutor::ProcessExecutor(ISubject &subject, int bucket) : m_subject(subject), m_bucket(bucket)
 {
     m_subject.AddObserver(m_bucket, this);
@@ -13,24 +13,23 @@ ProcessExecutor::~ProcessExecutor()
     m_subject.RemoveObserver(m_bucket, this);
 }
 
-void ProcessExecutor::OnNotify(const std::vector<std::string>& message)
+void ProcessExecutor::OnNotify(const std::unordered_map<std::string, int>& message)
 {
-    std::cout << "ProcessExecutor notified." << std::endl;
-    
-    for (const auto& process : message) {
-        auto proess_args = std::make_unique<std::vector<std::string>>();
+    for (const auto& [process, running] : message) {
+        if (0 == running){
+            auto process_args = std::make_unique<std::vector<std::string>>();
+            this->extract_arguments(process, process_args);
 
-        this->extract_arguments(process, proess_args);
-
-        if (!proess_args->empty()) {
-            int result = execute_process(*proess_args);
-            if (result != 0) {
-                std::cerr << "Failed to execute process: " << process << std::endl;
+            if (!process_args->empty()) {
+                int result = execute_process(*process_args);
+                if (result != 0) {
+                    std::cerr << "Failed to execute process: " << process << std::endl;
+                }
             }
-        }
 
-        else {
-            std::cerr << "No valid arguments extracted from: " << process << std::endl;
+            else {
+                std::cerr << "No valid arguments extracted from: " << process << std::endl;
+            }
         }
     }
 }

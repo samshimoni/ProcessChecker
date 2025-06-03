@@ -32,20 +32,10 @@ int main() {
 
 
     while (true) {
-        std::vector<std::string> procesess_to_execute = {};
-
         auto results = checker.checkProcesses(names);
 
-        for (const auto& [name, running] : results) {
-            if (running == 0){
-                procesess_to_execute.push_back(name);
-            }
-        }
-
-        if (!procesess_to_execute.empty()) {
-               checker.Notify(ProcessChecker::BucketsTypes::COMMUNICATION, procesess_to_execute);    
-        }
-        
+        checker.Notify(ProcessChecker::BucketsTypes::COMMUNICATION, results);  
+          
         influxdb_cpp::builder()
         .meas("process_status")
         .field("solar", results["pythonsolar_monitor_grafana.py"] )

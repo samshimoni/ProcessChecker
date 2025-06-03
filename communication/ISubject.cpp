@@ -1,6 +1,7 @@
 #include "ISubject.hpp"
 #include "IObserver.hpp"
 #include <iostream>
+#include <unordered_map>
 
 ISubject::ISubject(){}
 ISubject::~ISubject() {}
@@ -19,7 +20,7 @@ void ISubject::RemoveObserver(int bucket, IObserver* observer){
     m_observers[bucket].remove(observer);
 }
 
-void ISubject::Notify(int bucket, const std::vector<std::string>& message){
+void ISubject::Notify(int bucket, const std::unordered_map<std::string, int>& message){
     for (auto o:m_observers[bucket]){
         o->OnNotify(message);
     }

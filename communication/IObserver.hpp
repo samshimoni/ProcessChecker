@@ -6,5 +6,5 @@
 class IObserver{
     public:
         virtual ~IObserver(){};
-        virtual void OnNotify(const std::vector<std::string>& message)=0;
+        virtual void OnNotify(const std::unordered_map<std::string, int>& message)=0;
 };

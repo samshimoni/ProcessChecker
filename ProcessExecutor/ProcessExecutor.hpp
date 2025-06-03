@@ -4,6 +4,7 @@
 #include <vector>
 #include "../communication/IObserver.hpp"
 #include <memory>
+#include <unordered_map>
 
 
 class ProcessExecutor : public IObserver {
@@ -11,7 +12,7 @@ public:
     explicit ProcessExecutor(ISubject& subject, int bucket);
     ~ProcessExecutor();
     
-    void OnNotify(const std::vector<std::string>& message) override;
+    void OnNotify(const std::unordered_map<std::string, int>& message) override;
     int execute_process(const std::vector<std::string>& args);
 
 private:
