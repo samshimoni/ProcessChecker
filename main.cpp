@@ -24,6 +24,7 @@ int main() {
         "pythonsolar_monitor_grafana.py",
         "pythoninotify.py/home/samuel/FTP/",
         "pythonmeshtastic_recv_handler.py",
+        "pythonalarm_server.py"
     };
 
 
@@ -41,6 +42,7 @@ int main() {
         .field("solar", results["pythonsolar_monitor_grafana.py"] )
         .field("camera", results["pythoninotify.py/home/samuel/FTP/"])
         .field("temperatur_sensor", results["pythonmeshtastic_recv_handler.py"])
+        .field("alarm", results["pythonalarm_server.py"])
         .post_http(si);
 
         std::this_thread::sleep_for(std::chrono::minutes(5));
