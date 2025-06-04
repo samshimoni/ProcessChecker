@@ -2,6 +2,7 @@
 #include <thread>
 #include <chrono>
 #include <string>
+#include <limits.h>
 
 #include "ProcessChecker/ProcessChecker.hpp"
 #include "ProcessExecutor/ProcessExecutor.hpp"
@@ -31,22 +32,26 @@ int main() {
     ProcessChecker checker;
     ProcessExecutor executor(checker, ProcessChecker::BucketsTypes::COMMUNICATION);
 
+    int last_time_running_process_count =  INT_MAX;
 
     while (true) {
-        auto results = checker.checkProcesses(names);
+        int running_process_count = 0;
+        auto results = checker.checkProcesses(names, running_process_count);
+        
+        if (running_process_count != last_time_running_process_count){
+            checker.Notify(ProcessChecker::BucketsTypes::COMMUNICATION, results);  
+            last_time_running_process_count = running_process_count;
 
-        checker.Notify(ProcessChecker::BucketsTypes::COMMUNICATION, results);  
+            influxdb_cpp::builder()
+            .meas("process_status")
+            .field("solar", results["pythonsolar_monitor_grafana.py"] )
+            .field("camera", results["pythoninotify.py/home/samuel/FTP/"])
+            .field("temperatur_sensor", results["pythonmeshtastic_recv_handler.py"])
+            .field("alarm", results["pythonalarm_server.py"])
+            .post_http(si);
+        }
           
-        influxdb_cpp::builder()
-        .meas("process_status")
-        .field("solar", results["pythonsolar_monitor_grafana.py"] )
-        .field("camera", results["pythoninotify.py/home/samuel/FTP/"])
-        .field("temperatur_sensor", results["pythonmeshtastic_recv_handler.py"])
-        .field("alarm", results["pythonalarm_server.py"])
-        .post_http(si);
-
         std::this_thread::sleep_for(std::chrono::minutes(5));
-        std::cout<<std::endl;
     }
 
     return 0;
