@@ -20,7 +20,7 @@ void ISubject::RemoveObserver(int bucket, IObserver* observer){
     m_observers[bucket].remove(observer);
 }
 
-void ISubject::Notify(int bucket, const std::unordered_map<std::string, int>& message){
+void ISubject::Notify(int bucket, const std::vector<std::vector<std::string>>& message){
     for (auto o:m_observers[bucket]){
         o->OnNotify(message);
     }

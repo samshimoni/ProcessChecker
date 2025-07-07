@@ -17,7 +17,7 @@ class ISubject{
         virtual void AddObserver(int bucket, IObserver* observer);
         virtual void RemoveObserver(int bucket, IObserver* observer);
 
-        virtual void Notify(int bucket, const std::unordered_map<std::string, int>& message);
+        virtual void Notify(int bucket, const std::vector<std::vector<std::string>>& message);
 
     private:
         typedef std::forward_list<IObserver*> ObserversList;

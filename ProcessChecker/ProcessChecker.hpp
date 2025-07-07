@@ -9,10 +9,8 @@
 class ProcessChecker : public ISubject {
 
 public:
-    std::unordered_map<std::string, int> checkProcesses(const std::vector<std::string>& names);
-
+    std::vector<std::vector<std::string>> checkProcesses(const std::vector<std::vector<std::string>>& processes, int& live_pro_found);
     enum BucketsTypes{COMMUNICATION};
-private:
 };
 
 #endif // PROCESSCHECKER_H
